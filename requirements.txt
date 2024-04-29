@@ -1,5 +1,5 @@
 amqp==5.1.1
-asgiref==3.5.2
+asgiref==3.8.1
 async-timeout==4.0.2
 attrs==22.2.0
 beautifulsoup4==4.11.1
@@ -17,17 +17,22 @@ click-repl==0.2.0
 coverage==7.1.0
 cryptography==39.0.1
 defusedxml==0.7.1
+dj-database-url==2.1.0
+dj-rest-auth==6.0.0
 Django==4.1.2
-django-allauth==0.51.0
+django-allauth==0.62.1
 django-autoslug==1.9.8
 django-bootstrap-v5==1.0.11
+django-cors-headers==4.3.1
 django-countries==7.4.2
 django-crispy-forms==1.14.0
 django-debug-toolbar==3.7.0
 django-dotenv==1.4.2
 django-htmx==1.12.2
-django-storages==1.13.1
 django-quill-editor==0.1.40
+django-storages==1.13.1
+djangorestframework==3.15.1
+djangorestframework-simplejwt==5.3.1
 exceptiongroup==1.1.0
 flake8==6.0.0
 google-api-core==2.10.2
@@ -35,6 +40,7 @@ google-api-python-client==2.66.0
 google-auth==2.14.1
 google-auth-httplib2==0.1.0
 googleapis-common-protos==1.57.0
+gunicorn==22.0.0
 httplib2==0.21.0
 idna==3.4
 iniconfig==2.0.0
@@ -61,6 +67,7 @@ PyJWT==2.6.0
 pyparsing==3.0.9
 pytest==7.2.1
 pytest-django==4.5.2
+python-dotenv==1.0.1
 python3-openid==3.2.0
 pytz==2022.7.1
 redis==4.4.2
