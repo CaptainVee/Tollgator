@@ -6,7 +6,8 @@ from .models import Order, Cart, Transaction
 from courses.models import Course
 from common.utils import my_random_string, convert_currency_to_local
 from .payments import verify_transaction, initiate_paystack_url
-from get_env import get_secret
+# from get_env import get_secret
+import os
 
 # Create your views here.
 
@@ -61,7 +62,7 @@ def checkout(request, cart_id):
             "total_price": cart.total_amount,
         },
     )
-    server_url = get_secret("SERVER_URL")  # eg localhost:8000
+    server_url = os.getenv("SERVER_URL")  # eg localhost:8000
     email = cart.user.email
     amount = convert_currency_to_local(
         user_currency=cart.user.currency,

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-from get_env import get_secret
+# from get_env import get_secret
 from dotenv import load_dotenv
 import dj_database_url
 
