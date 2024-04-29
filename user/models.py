@@ -10,6 +10,13 @@ from common.models import BaseModel, Currency
 from courses.models import Course, Video
 
 
+SIGNUP_OPTIONS = (
+    ("Normal", "Normal"),
+    ("Facebook", "Facebook"),
+    ("Google", "Google"),
+)
+
+
 class User(AbstractUser):
     name = models.CharField(_("Name of user"), blank=False, null=False, max_length=250)
     first_name = None
@@ -21,6 +28,9 @@ class User(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
     is_instructor = models.BooleanField(default=False)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT, default=1)
+    signup_mode = models.CharField(
+        choices=SIGNUP_OPTIONS, null=True, blank=True, default="Normal", max_length=255
+    )
 
     def get_absolute_url(self):
         return reverse("profile")

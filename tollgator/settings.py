@@ -47,6 +47,9 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "rest_framework",
+    "rest_framework.authtoken",
+    'dj_rest_auth.registration',
     "django_htmx",
     "debug_toolbar",
     "bootstrap5",
@@ -73,6 +76,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     # extras
     "django_htmx.middleware.HtmxMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -117,15 +121,20 @@ WSGI_APPLICATION = "tollgator.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": get_secret("DATABASE_NAME"),
+#         "USER": get_secret("DATABASE_USER"),
+#         "PASSWORD": get_secret("DATABASE_PASSWORD"),
+#         "HOST": get_secret("DATABASE_HOST"),
+#         "PORT": "",
+#     }
+# }
+
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": get_secret("DATABASE_NAME"),
-        "USER": get_secret("DATABASE_USER"),
-        "PASSWORD": get_secret("DATABASE_PASSWORD"),
-        "HOST": get_secret("DATABASE_HOST"),
-        "PORT": "",
-    }
+    "default": get_secret("DATABASE_URL")
 }
 
 # Password validation
@@ -214,10 +223,10 @@ AUTH_USER_MODEL = "user.User"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SITE_ID = 1
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # EMAIL_HOST = "smtp.gmail.com"

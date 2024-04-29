@@ -2,7 +2,7 @@ from django.urls import path
 
 
 from .views import profile, dashboard, progress, completed
-
+from user.api.urls import urlpatterns as api_urlpatterns
 
 urlpatterns = [
     path("profile/", profile, name="profile"),
@@ -14,4 +14,4 @@ urlpatterns = [
 
 htmx_urlpatterns = []
 
-urlpatterns += htmx_urlpatterns
+urlpatterns = urlpatterns + htmx_urlpatterns + api_urlpatterns
