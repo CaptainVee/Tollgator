@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 from get_env import get_secret
+from dotenv import load_dotenv
+import dj_database_url
+
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,11 +27,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_secret("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = str(get_secret("ALLOWED_HOSTS")).split()
+ALLOWED_HOSTS = str(os.getenv("ALLOWED_HOSTS")).split()
 
 # Application definition
 DJANGO_APPS = [
@@ -134,9 +138,8 @@ WSGI_APPLICATION = "tollgator.wsgi.application"
 
 
 DATABASES = {
-    "default": get_secret("DATABASE_URL")
-}
-
+            "default": dj_database_url.parse(os.getenv('DATABASE_URL'))
+    }
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -245,8 +248,8 @@ AWS_DEFAULT_ACL = None
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
-PAYSTACK_SECRET_KEY = get_secret("PAYSTACK_SECRET_KEY")
-PAYSTACK_PUBLIC_KEY = get_secret("PAYSTACK_PUBLIC_KEY")
+PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY")
+PAYSTACK_PUBLIC_KEY = os.getenv("PAYSTACK_PUBLIC_KEY")
 
 # Celery
 # ------------------------------------------------------------------------------
