@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = str(os.getenv("ALLOWED_HOSTS")).split()
+ALLOWED_HOSTS = ["udanaa-backend.onrender.com", "*"]
 
 # Application definition
 DJANGO_APPS = [
