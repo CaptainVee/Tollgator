@@ -95,7 +95,8 @@ class CustomLoginView(LoginView):
             # If authentication fails, return an error response
             if not user:
                 return Response(
-                    {"message": "Incorrect password."}, status=status.HTTP_400_BAD_REQUEST
+                    {"message": "Incorrect password."},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
 
             # If authentication is successful, log in the user and return a success response
@@ -114,33 +115,28 @@ class CustomLoginView(LoginView):
 
 
 class CustomRegisterView(RegisterView):
-    def perform_create(self, serializer):
-        # Check if the signup_mode field is provided in the request data
-        signup_mode = self.request.data.get("signup_mode")
-
-        # If signup_mode is not provided, default to "Email"
-        # if not signup_mode:
-        #     signup_mode = "Email"
-
-        # If signup_mode is "Social", return an error response
-        if signup_mode == "Social":
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            User.objects.get(email=request.data.get("email").replace(" ", "").lower())
             return Response(
-                {"detail": "Social sign-up is not allowed."},
+                {"error": "User with this email already exists"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        except User.DoesNotExist:
+            user = self.perform_create(
+                serializer
+            )
 
-        # Call the parent's perform_create method to create the user
-        super().perform_create(serializer)
-
-        # If registration is successful, generate JWT tokens and return them
-        user = serializer.instance
-        refresh = RefreshToken.for_user(user)
-        content = {
-            "active": user.is_active,
-            "token": {
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-            },
-            "full_name": user.get_full_name,
-        }
-        return Response(content, status=status.HTTP_201_CREATED)
+            # Generate JWT tokens if registration is successful
+            refresh = RefreshToken.for_user(user)
+            content = {
+                "active": user.is_active,
+                "token": {
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                },
+                "full_name": user.get_full_name,
+            }
+            return Response(content, status=status.HTTP_201_CREATED)

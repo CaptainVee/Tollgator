@@ -23,7 +23,12 @@ class User(AbstractUser):
     last_name = None
     email = models.EmailField(_("Email Address"), unique=True)
     username = models.CharField(
-        verbose_name=_("username"), db_index=True, max_length=255, unique=True
+        verbose_name=_("username"),
+        db_index=True,
+        max_length=255,
+        unique=True,
+        null=True,
+        blank=True,
     )
     date_joined = models.DateTimeField(auto_now_add=True)
     is_instructor = models.BooleanField(default=False)
@@ -48,8 +53,8 @@ class User(AbstractUser):
     def courses(self):
         return self.course_set.all().order_by("created_at")
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    # USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["email"]
 
     class Meta:
         verbose_name = _("user")

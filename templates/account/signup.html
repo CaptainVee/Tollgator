@@ -10,19 +10,13 @@
 			{{form.errors.email}}
 			{{form.errors.password1}}
 			{{form.errors.password2}}
+			{{form.errors}}
 		</div>
 
 		{% csrf_token %}
 		<h2>Create Account</h2>
 
 		<div class="wrap2">
-			<div class="form-group">
-				<label for="id_username">Username</label>
-				<div class="placehold">
-					<input name="username" type="text" class="form-control" id="id_username"
-						placeholder="be creative :)" required>
-				</div>
-			</div>
 			<div class="form-group">
 				<label for="id_email">Email address</label>
 				<div class="placehold">
