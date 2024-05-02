@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import os
 # from get_env import get_secret
 from dotenv import load_dotenv
@@ -277,4 +278,13 @@ REST_FRAMEWORK = {
 
 REST_AUTH = {
     'USE_JWT': True,
+}
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    # "SIGNING_KEY": env("SIGNING_KEY"),
+    # "USER_ID_FIELD": "id",
+    # "USER_ID_CLAIM": "user_id",
 }

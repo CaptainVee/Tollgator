@@ -33,9 +33,9 @@ class Course(BaseModel):
     thumbnail_url = models.URLField(blank=True, null=True)
     total_watch_time = models.PositiveIntegerField(null=True, default=0)
     # youtube_channel = models.CharField(max_length=500, blank=True, null=True)
-    # category = models.ForeignKey(
-    #     "Category", on_delete=models.SET_NULL, null=True, blank=False
-    # )
+    category = models.ForeignKey(
+        "Category", on_delete=models.SET_NULL, null=True, blank=False
+    )
     translation = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=10)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT, default=1)

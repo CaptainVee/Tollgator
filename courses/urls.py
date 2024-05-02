@@ -1,4 +1,5 @@
 from django.urls import path
+from courses.api.urls import urlpatterns as api_urlpatterns
 from .views import (
     Home,
     # CourseListView,
@@ -113,4 +114,5 @@ htmx_urlpatterns = [
     path("clear/", clear_messages, name="clear"),
 ]
 
-urlpatterns += htmx_urlpatterns
+
+urlpatterns = urlpatterns + htmx_urlpatterns + api_urlpatterns
