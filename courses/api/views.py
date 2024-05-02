@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.db.models import Count
 from courses.models import Course, Category, Video
@@ -70,13 +71,15 @@ class Home(APIView):
 
 
 class TopEnrolledCoursesView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         # Get all categories ordered by course count (descending)
         top_categories = Category.objects.annotate(
             course_count=Count("course")
         ).order_by("-course_count")[:5]
-        continue_watching = request.user.courses.all()
-        # serialized_courses = CourseSerializer(continue_watching, many=True).data
+
+        continue_watching = request.user.user_dashboard.courses.all()
 
         serialized_courses_with_progress = []
 
