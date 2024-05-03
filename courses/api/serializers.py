@@ -79,6 +79,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "brief_description",
             "slug",
             "thumbnail",
+            "thumbnail_url",
             "total_watch_time",
             "price",
             'avg_rating',
