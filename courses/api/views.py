@@ -79,7 +79,7 @@ class TopEnrolledCoursesView(APIView):
             course_count=Count("course")
         ).order_by("-course_count")[:5]
 
-        continue_watching = request.user.user_dashboard.courses.all()
+        continue_watching = request.user.user_dashboard.courses.all()[:5]
 
         serialized_courses_with_progress = []
 

@@ -1,9 +1,7 @@
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 
-# from rest_framework.renderers import JSONRenderer
-# from rest_framework.authtoken.models import Token
-# from rest_framework.views import APIView
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .utils import generate_password
 from .serializers import SocialMediaSerializer
@@ -11,6 +9,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from dj_rest_auth.views import LoginView
 from dj_rest_auth.registration.views import RegisterView
+from rest_framework.permissions import IsAuthenticated
+from user.models import Enrollment
+from .serializers import EnrollmentSerializer
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 
@@ -125,9 +126,7 @@ class CustomRegisterView(RegisterView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         except User.DoesNotExist:
-            user = self.perform_create(
-                serializer
-            )
+            user = self.perform_create(serializer)
 
             # Generate JWT tokens if registration is successful
             refresh = RefreshToken.for_user(user)
@@ -140,3 +139,25 @@ class CustomRegisterView(RegisterView):
                 "full_name": user.get_full_name,
             }
             return Response(content, status=status.HTTP_201_CREATED)
+
+
+class UserEnrollmentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        enrolled = Enrollment.objects.select_related("course").filter(
+            user_dashboard=request.user.user_dashboard
+        )
+
+        in_progress = enrolled.filter(completed=False)
+        completed = enrolled.filter(completed=True)
+
+        in_progress_serialized = EnrollmentSerializer(in_progress, many=True)
+        completed_serialized = EnrollmentSerializer(completed, many=True)
+
+        return Response(
+            {
+                "in_progress": in_progress_serialized.data,
+                "completed": completed_serialized.data,
+            }
+        )
