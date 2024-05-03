@@ -1,14 +1,27 @@
 from rest_framework import serializers
-from courses.models import Course, Category, Lesson, CourseRating
+from courses.models import Course, Category, Lesson, CourseRating, Video
 from instructor.api.serializers import InstructorSerializer
 from user.models import Enrollment
 from django.db.models import Count
 
 
+class VideoListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = ["id", "title", "duration_seconds"]
+
+
 class LessonSerializer(serializers.ModelSerializer):
+    videos = serializers.SerializerMethodField()
+
     class Meta:
         model = Lesson
         fields = "__all__"
+
+    def get_videos(self, obj):
+        videos = obj.videos
+        serializers = VideoListSerializer(videos, many=True)
+        return serializers.data
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -40,8 +53,8 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         return enrolled_count
 
     def get_lessons(self, obj):
-        lesson_qs = obj.lesson_set.all().order_by("created_at")
-        serializers = LessonSerializer(lesson_qs, many=True)
+        lessons = obj.lessons
+        serializers = LessonSerializer(lessons, many=True)
         return serializers.data
 
     def get_reviews(self, obj):
