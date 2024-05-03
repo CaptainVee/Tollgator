@@ -72,6 +72,7 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = [
             "id",
+            "author",
             "enrolled_users",
             "created_at",
             "updated_at",
