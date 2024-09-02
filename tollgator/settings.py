@@ -44,6 +44,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    "django.contrib.postgres",
 ]
 
 THIRD_PARTY_APPS = [
@@ -60,6 +61,7 @@ THIRD_PARTY_APPS = [
     "bootstrap5",
     "pytest_django",
     "django_quill",
+    "django_filters",
 ]
 
 LOCAL_APPS = [
@@ -273,7 +275,10 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-    )
+    ),
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 10
 }
 
 REST_AUTH = {

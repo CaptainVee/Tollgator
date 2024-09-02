@@ -1,11 +1,20 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, ListCreateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
-from django.db.models import Count
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, filters
+from django.db.models import Count, Q
 from courses.models import Course, Category, Video
-from .serializers import CourseSerializer, CategorySerializer, CourseDetailSerializer
+from instructor.models import Instructor
+from instructor.api.serializers import InstructorSerializer
+from .filters import CourseFilter
+from .serializers import (
+    CourseSerializer,
+    CategorySerializer,
+    CourseDetailSerializer,
+    CategoryListSerializer,
+)
 import random
 
 
@@ -140,3 +149,74 @@ class CourseDetailAPIView(RetrieveAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseDetailSerializer
     lookup_field = "slug"
+
+
+class CoursesByCategoryAPIView(APIView):
+    """
+    API endpoint to retrieve courses belonging to a specific category.
+    """
+
+    def get(self, request, category_id):
+        try:
+            category = Category.objects.get(id=category_id)
+        except Category.DoesNotExist:
+            return Response(
+                {"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        courses = Course.objects.filter(category=category)
+        serialized_courses = CourseSerializer(courses, many=True)
+
+        response_data = {"category": category.name, "courses": serialized_courses.data}
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
+
+class CourseSearchView(ListAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    filterset_class = CourseFilter
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
+        "title",
+        "tags",
+        "brief_description",
+        "content",
+        "category__name",
+        "updated_at",
+        "author__name",
+        "author__username",
+        "lesson__title",
+        "lesson__video__title",
+    ]
+
+
+class AutocompleteView(APIView):
+    def get(self, request):
+        query = request.GET.get("search", "")
+        suggestions = self.get_autocomplete_suggestions(query)
+        return Response(suggestions)
+
+    def get_autocomplete_suggestions(self, query):
+        course_suggestions = Course.objects.filter(
+            Q(title__icontains=query) | Q(brief_description__icontains=query)
+        )[:5]
+        category_suggestions = Category.objects.filter(name__icontains=query)[:5]
+        instructor_suggestions = Instructor.objects.filter(
+            Q(user__name__icontains=query) | Q(user__username__icontains=query)
+        )[:5]
+
+        return {
+            "courses": CourseSerializer(course_suggestions, many=True).data,
+            "categories": CategoryListSerializer(category_suggestions, many=True).data,
+            "instructors": InstructorSerializer(instructor_suggestions, many=True).data,
+        }
+
+
+class CategoryCreateListView(ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryListSerializer
+
+    def perform_create(self, serializer):
+        return super().perform_create(serializer)

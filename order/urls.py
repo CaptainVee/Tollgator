@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import enroll, checkout, verify
+from order.api.urls import urlpatterns as api_urlpatterns
 
 
 urlpatterns = [
@@ -24,3 +25,5 @@ urlpatterns = [
 htmx_urlpatterns = []
 
 urlpatterns += htmx_urlpatterns
+
+urlpatterns = urlpatterns + htmx_urlpatterns + api_urlpatterns

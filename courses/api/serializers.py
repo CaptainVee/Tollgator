@@ -111,7 +111,13 @@ class CategorySerializer(serializers.ModelSerializer):
 
         top_courses_by_category = courses.annotate(
             enrolled_users=Count("enrollment__user_dashboard")
-        ).order_by("-enrolled_users")[:3]
+        ).order_by("-enrolled_users")
         serialized_courses = CourseSerializer(top_courses_by_category, many=True).data
 
         return serialized_courses
+
+
+class CategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'

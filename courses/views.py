@@ -38,7 +38,7 @@ class Home(View):
         user = request.user
         if user.is_authenticated:
             courses = Course.objects.filter(is_private=False)
-            template = ("courses/course_list.html",)
+            template = ("courses/ff.html",)
         else:
             courses = list(Course.objects.filter(is_private=False))
             try:

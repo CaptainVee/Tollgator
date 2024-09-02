@@ -11,7 +11,7 @@ from dj_rest_auth.views import LoginView
 from dj_rest_auth.registration.views import RegisterView
 from rest_framework.permissions import IsAuthenticated
 from user.models import Enrollment
-from .serializers import EnrollmentSerializer
+from .serializers import EnrollmentSerializer, ProfileSerializer
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 
@@ -161,3 +161,20 @@ class UserEnrollmentView(APIView):
                 "completed": completed_serialized.data,
             }
         )
+
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        user = request.user
+        serializer = ProfileSerializer(user)
+        return Response(serializer.data)
+
+    def put(self, request, format=None):
+        user = request.user
+        serializer = ProfileSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

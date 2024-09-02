@@ -1,11 +1,13 @@
 <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
 <div class="video-container" style="height: inherit;">
 
-    <iframe hx-get="{% url 'get-video-sidebar' last_video_watched.course.id %}" hx-trigger="load" hx-swap="innerHTML"
+    <!-- <iframe hx-get="{% url 'get-video-sidebar' last_video_watched.course.id %}" hx-trigger="load" hx-swap="innerHTML"
         hx-target="#course-curriculum" id="player" width="870" height="500"
         src="https://www.youtube-nocookie.com/embed/{{ last_video_watched.video_id }}?enablejsapi=1&start={{ start }}&controls=1&modestbranding=0"
         frameborder="0" allowfullscreen>
-    </iframe>
+    </iframe> -->
+    <iframe src="https://drive.google.com/file/d/1bQIPK3Iyi5ohCguNtSwFxbj19pgiLkDE/preview" width="640" height="480" allow="autoplay"></iframe>
+
     <!-- <div class="controls">
 
         <div id="progress-bar-containers">
@@ -20,6 +22,14 @@
     </div> -->
 
 </div>
+
+<div id="myElement">This text will be replaced with a player.</div>
+<script>
+    jwplayer("myElement").setup({
+        "playlist": "https://cdn.jwplayer.com/v2/media/hWF9vG66"
+    });
+</script>
+
 <script>
     // 2. This code loads the IFrame Player API code asynchronously.
     var tag = document.createElement("script");
@@ -113,9 +123,13 @@
 
 
 </script>
+<script src="https://cdn.jwplayer.com/players/UVQWMA4o-kGWxh33Q.js"></script>
 
 <!-- <iframe id="video-1030-1_youtube_iframe" frameborder="0" allowfullscreen="1"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     title="Finally Revealed: My Minimalist and Affordable Home Office Tour | Work From Home"
     src="https://www.youtube.com/embed/aNy6kj-qjDk?controls=0&amp;rel=0&amp;disablekb=1&amp;showinfo=0&amp;modestbranding=0&amp;html5=1&amp;iv_load_policy=3&amp;autoplay=0&amp;end=0&amp;loop=0&amp;playsinline=0&amp;start=0&amp;nocookie=false&amp;enablejsapi=1&amp;origin=https%3A%2F%2Fadorahack.com&amp;widgetid=1"
     width="447" height="251.4375"></iframe> -->
+
+
+
